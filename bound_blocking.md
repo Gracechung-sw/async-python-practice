@@ -54,3 +54,26 @@ if __name__ == "__main__":
     result = io_bound_func()
     print(result)
 ```
+
+## 블로킹
+
+바운드에 의해 코드가 멈추게 되는 현상이 발생하는 것. (그래서 non blocking은 바운드에 의해 코드가 멈추지 않는 것이 된다. )
+
+```
+import requests
+
+def io_bound_func():
+    result = requests.get("https://google.com")
+    return result
+
+if __name__ == "__main__":
+    result = io_bound_func() # 1번
+    result = io_bound_func() # 2번
+    result = io_bound_func() # 3번
+    result = io_bound_func() # 4번
+    result = io_bound_func() # 5번
+    result = io_bound_func() # 6번
+    print(result)
+```
+
+여기선 총 6번 블로킹이 된 것이다.
