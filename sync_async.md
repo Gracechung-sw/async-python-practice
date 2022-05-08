@@ -4,7 +4,7 @@
 
 코드가 동기적으로 동작한다는 것은 코드가 반드시 작성된 순서 그대로 실행된다는 것.
 
-```
+```python
 import time
 
 def delivery(name, mealtime):
@@ -45,7 +45,7 @@ C 그릇 수거 완료
 
 코드가 반드시 작성된 순서 그대로 실행되는 것이 아니다.
 
-```
+```python
 import asyncio
 import time
 

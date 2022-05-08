@@ -11,7 +11,7 @@ see https://docs.python.org/ko/3/library/asyncio-task.html
 다 연결시켜 생각해보면,
 프로그램이 실행되면 sub routine은 별도 scope에 해당 로직들을 모아 놓고 있다. sub routine이 호출될 때, 해당하는 로직들의 scope로 이동 했다가 return을 통해 원래 호출 시점인 main routine으로 돌아온다.
 
-```
+```python
 import time
 
 def delivery(name, mealtime):
@@ -38,7 +38,7 @@ if __name__ == "__main__":
 
 - coroutine: 다양한 진입점과 다양한 탈출점이 있는 루틴. (vs. sub routine: 하나의 진입점, 하나틔 탈출점)
 
-```
+```python
 import asyncio
 import time
 
@@ -76,3 +76,71 @@ if __name__ == "__main__":
 2. 그럼 await은 async를 사용한 coroutine 함수에는 무조건 아무렇게나 사용하면 되냐? 예를 들어 `async hello(): await print("hello world")` 처럼!
    > 아니다. 만약 저 코드를 실행시켜보면 `TypeError: object NoneType cant' be used in 'await' expression` 에러가 뜰 것이다. await는 awaitable 객체에서만 사용할 수 있다.  
    > see https://docs.python.org/ko/3/library/asyncio-task.html#asyncio-awaitables
+
+## Usage
+
+### 1. without coroutine
+
+```python'
+# see https://2.python-requests.org/en/master/user/advanced/#id1
+# pip install requests
+
+import requests
+import time
+
+
+def fetcher(session, url):
+    with session.get(url) as response:
+        return response.text
+
+
+def main():
+    urls = ["https://naver.com", "https://google.com", "https://instagram.com"] * 10
+
+    with requests.Session() as session:
+        result = [fetcher(session, url) for url in urls] # blocking이 발생함.
+        print(result)
+
+
+if __name__ == "__main__":
+    start = time.time()
+    main()
+    end = time.time()
+    print(end - start)  # 12s
+```
+
+### 2. with coroutine
+
+```python
+# see https://docs.aiohttp.org/en/stable/
+# pip install aiohttp~=3.7.3
+
+
+import aiohttp
+import time
+import asyncio
+
+
+async def fetcher(session, url):
+    async with session.get(url) as response:
+        return await response.text()
+
+
+async def main():
+    urls = ["https://naver.com", "https://google.com", "https://instagram.com"] * 10
+
+    async with aiohttp.ClientSession() as session:
+        result = await asyncio.gather(*[fetcher(session, url) for url in urls])
+        print(result)
+
+
+if __name__ == "__main__":
+    start = time.time()
+    asyncio.run(main())
+    end = time.time()
+    print(end - start)  # 4.8s
+```
+
+## Use multiprocessing, multithreading
+
+multiprocessing과 multithreading을 사용해서 동기적 코드(without coroutine)을 속도를 높이는 방법에 대해.. Next step

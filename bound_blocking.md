@@ -8,7 +8,7 @@
 즉, 프로그램이 실행 될 때 CPU에서읙 계산에서 프로그램이 잠시 멈추고 잠시 시간이 걸림.
 정말 복잡한 수학 수식을 계산하는 경우에 컴퓨터의 실행 속도가 늦어짐.
 
-```
+```python
 def cpu_bound_func(number: int):
     total = 1
     arrange = range(1, number + 1)
@@ -29,7 +29,7 @@ if __name__ == "__main__":
 CPU 바운드가 CPU 연산에 의해 프로그램 실행이 잠시 멈추는 것이라면,
 I/O 바운드란 프로그램이 실행될 때 실행 속도가 I(Input), O(Output)에 의해 제한됨을 의미한다.
 
-```
+```python
 def io_bound_func():
     print("값을 입력해주세요") # 실행을 하면 이 print문이 실행 된 후 '사용자가 값을 input' 하기 전까지 실행이 멈취있다. 이는 cpu가 연산을 하기 위해 멈춰진게 아니다.
     input_value = input()
@@ -43,7 +43,7 @@ if __name__ == "__main__":
 Input(에 대한 응답)을 하는 주체는 사용자, 다른 서버..(이런 경우 Network I/O 라고도 함.) 등이 될 수 있다.
 컴퓨터와 컴퓨터끼리 통신을 할 때에도 I/O 바운드가 발생할 수 있다.
 
-```
+```python
 import requests
 
 def io_bound_func():
@@ -59,7 +59,7 @@ if __name__ == "__main__":
 
 바운드에 의해 코드가 멈추게 되는 현상이 발생하는 것. (그래서 non blocking은 바운드에 의해 코드가 멈추지 않는 것이 된다. )
 
-```
+```python
 import requests
 
 def io_bound_func():
